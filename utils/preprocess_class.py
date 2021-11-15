@@ -2,6 +2,20 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 import os
 import traceback
+import logging
+from time import gmtime, strftime
+
+main_path = os.path.abspath(os.path.join(__file__, "../.."))
+
+log_directory = f'{main_path}/logs/'
+if not os.path.exists(log_directory):
+    os.makedirs(log_directory)
+
+logging.basicConfig(handlers=[logging.FileHandler(
+        f'{log_directory}/processed_files.log', 'w',
+        'utf-8')], level=logging.DEBUG, format='%(name)s | %(asctime)s | %(levelname)s: %(message)s')
+
+logger = logging.getLogger(__name__)
 
 class PreprocessAudio():
 
@@ -93,6 +107,7 @@ class PreprocessAudio():
 
         print()
         print(f'processed -- {self._stats}.{self.audio_format} -- files')
+        logger.info(f'Processed -- {self._stats}.{self.audio_format} -- files')
 
 
 if __name__ == '__main__':
